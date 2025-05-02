@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Knzoch Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Register</h2>
+  <input type="email" id="registerEmail" placeholder="Email"><br>
+  <input type="password" id="registerPassword" placeholder="Password"><br>
+  <button onclick="register()">Daftar</button>
+
+  <p>Sudah punya akun? <a href="login.html">Login</a></p>
+
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script>
+    const supabase = supabase.createClient('https://tjdxqdhebyygkxfkhwhg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqZHhxZGhlYnl5Z2t4Zmtod2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMDU1NDQsImV4cCI6MjA2MTY4MTU0NH0.VKy39d7z2bl2tA6BZuPlc_Ch5HTfuTrobRd6xbFzjUU');
+
+    async function register() {
+      let { data, error } = await supabase.auth.signUp({
+        email: document.getElementById('registerEmail').value,
+        password: document.getElementById('registerPassword').value
+      });
+      if (error) {
+        alert(error.message);
+      } else {
+        alert('Daftar sukses. Silakan cek email untuk verifikasi!');
+      }
+    }
+  </script>
+</body>
+</html>

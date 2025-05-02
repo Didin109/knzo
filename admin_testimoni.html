@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Testimoni</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Admin - Testimoni</h2>
+
+  <input type="text" id="nama" placeholder="Nama"><br>
+  <textarea id="pesan" placeholder="Isi testimoni"></textarea><br>
+  <button onclick="tambahTestimoni()">Tambah</button>
+
+  <h3>Semua Testimoni:</h3>
+  <ul id="daftarTestimoni"></ul>
+
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script>
+    const supabase = supabase.createClient('https://tjdxqdhebyygkxfkhwhg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqZHhxZGhlYnl5Z2t4Zmtod2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxMDU1NDQsImV4cCI6MjA2MTY4MTU0NH0.VKy39d7z2bl2tA6BZuPlc_Ch5HTfuTrobRd6xbFzjUU');
+
+    async function tambahTestimoni() {
+      const { data, error } = await supabase
+        .from('testimoni')
+        .insert([{ nama: document.getElementById('nama').value, pesan: document.getElementById('pesan').value }]);
+      if (error) alert(error.message);
+      else {
+        alert('Testimoni ditambahkan!');
+        tampilkanSemua();
+      }
+    }
+
+    async function tampilkanSemua() {
+      const { data, error } = await supabase.from('testimoni').select('*');
+      let list = '';
+      data.forEach(t => {
+        list += `<li>${t.nama}: ${t.pesan} <button onclick="hapus(${t.id})">Hapus</button></li>`;
+      });
+      document.getElementById('daftarTestimoni').innerHTML = list;
+    }
+
+    async function hapus(id) {
+      await supabase.from('testimoni').delete().eq('id', id);
+      tampilkanSemua();
+    }
+
+    tampilkanSemua();
+  </script>
+</body>
+</html>
